@@ -22,13 +22,14 @@ def send_welcome(message):
 def search_media(message):
     search_term = message.text[8:]
     bot.reply_to(message, "Searching for: " + search_term)
-    search_results = sonarr.SonarrRetriever().searchForMedia(search_term)
+    search_results.clear()
+    search_results.extend(sonarr.SonarrRetriever().searchForMedia(search_term))
     result_text = 'Found: {results} available TV Shows. Chose one: '.format(results = len(search_results))
     markup = generate_markup(search_results, 0)
     bot.reply_to(message, result_text, reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
-def  test_callback(call):
+def  show_selection_handler(call):
     if call.data == 'END':
         bot.edit_message_reply_markup(message_id=call.message.id, chat_id=call.message.chat.id, reply_markup=None)
     else:
@@ -42,13 +43,10 @@ def generate_markup(results, start_item_num: int, dont_include_shows: int = 0):
     last_item = min(len(results) - start_item_num,9)
     for i in range(last_item):
         item = results[i + start_item_num]
-        if item.id != dont_include_shows:
+        if int(item.id) != int(dont_include_shows):
             itemtext = '{title} ({year}) - {overview}...'.format(title=item.title, year = item.year, overview = item.overview[:100])
             itembtn = types.InlineKeyboardButton(itemtext, callback_data=item.id)
             markup.add(itembtn)
-    itemtext = 'SHOW MORE RESULTS'
-    itembtn = types.InlineKeyboardButton(itemtext, callback_data='MORE')
-    markup.add(itembtn)
     itemtext = 'END SEARCH'
     itembtn = types.InlineKeyboardButton(itemtext, callback_data='END')
     markup.add(itembtn)
