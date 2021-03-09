@@ -3,6 +3,7 @@ import yaml
 
 import telebot
 import sonarr
+import radarr
 
 from telebot import types
 
@@ -12,6 +13,9 @@ CONFIG_PATH = os.path.join(ROOT_DIR, "config.yaml")
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 search_results = {}
 selected_results = {}
+
+search_movie_results = {}
+selected_movie_results = {}
 
 bot = telebot.TeleBot(config["telegram"]["token"], parse_mode=None) # You can set parse_mode by default. HTML or MARKDOWN
 
@@ -31,6 +35,20 @@ def search_media(message):
         search_results.update(sonarr.SonarrRetriever().searchForMedia(search_term))
         result_text = 'Found: {results} available TV Shows. Showing first 10.'.format(results = len(search_results))
         markup = generate_markup(search_results, 0)
+        bot.reply_to(message, result_text, reply_markup=markup)
+
+@bot.message_handler(commands=['searchmovie'])
+def search_movie_media(message):
+    selected_movie_results.clear()
+    search_movie_results.clear()
+    if len(message.text) <= 8:
+        bot.reply_to(message, 'Don''t do a Pete, include something to search for: /searchmovie movie name')
+    else:
+        search_term = message.text[8:]
+        bot.reply_to(message, "Searching for: " + search_term)
+        search_movie_results.update(radarr.RadarrRetriever().searchForMedia(search_term))
+        result_text = 'Found: {results} available Movies. Showing first 10.'.format(results = len(search_movie_results))
+        markup = generate_markup(search_movie_results, 0)
         bot.reply_to(message, result_text, reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
