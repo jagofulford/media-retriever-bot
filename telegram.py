@@ -26,7 +26,7 @@ def search_media(message):
     search_term = message.text[8:]
     bot.reply_to(message, "Searching for: " + search_term)
     search_results.update(sonarr.SonarrRetriever().searchForMedia(search_term))
-    result_text = 'Found: {results} available TV Shows. Chose one: '.format(results = len(search_results))
+    result_text = 'Found: {results} available TV Shows. Showing first 10.'.format(results = len(search_results))
     markup = generate_markup(search_results, 0)
     bot.reply_to(message, result_text, reply_markup=markup)
 
