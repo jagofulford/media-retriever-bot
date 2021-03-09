@@ -43,6 +43,7 @@ def  show_selection_handler(call):
         added_media = search_results.get(call.data)
         response = 'Adding show: {details}'.format(details = added_media.title)
         bot.answer_callback_query(call.id, response)
+        sonarr.SonarrRetriever().addMedia(call.data[1:])
         selected_results[call.data] = added_media
         markup = generate_markup(search_results,0, selected_results)
         bot.edit_message_reply_markup(message_id=call.message.id, chat_id=call.message.chat.id, reply_markup=markup)

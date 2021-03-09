@@ -13,4 +13,6 @@ class MediaRetriever( abc.ABC ) :
     @abc.abstractclassmethod
     def searchForMedia(self, search_term: str ) -> list[result]:
         pass
-
+    @abc.abstractclassmethod
+    def addMedia(self, tvidb: int) -> bool:
+        pass
