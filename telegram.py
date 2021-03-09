@@ -18,7 +18,7 @@ bot = telebot.TeleBot(config["telegram"]["token"], parse_mode=None) # You can se
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-	bot.reply_to(message, "Welcome please use the /search command with the title of the media you're looking for to start searching for a movie or TV Show")
+	bot.reply_to(message, "Welcome please use the /search command with the title of the tvshow or /searchmovie with the title of movie")
 
 @bot.message_handler(commands=['search'])
 def search_media(message):
