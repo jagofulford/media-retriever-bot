@@ -22,7 +22,7 @@ class SonarrRetriever(media.MediaRetriever):
                 mR.get("title"),
                 mR.get("year"),
                 mR.get("remotePoster"),
-                mR.get("overview"),
+                mR.get("overview",''),
                 mR.get("tvdbId"),
                 "Sonarr")
             results['s'+str(result.id)] = result

@@ -23,12 +23,15 @@ def send_welcome(message):
 def search_media(message):
     selected_results.clear()
     search_results.clear()
-    search_term = message.text[8:]
-    bot.reply_to(message, "Searching for: " + search_term)
-    search_results.update(sonarr.SonarrRetriever().searchForMedia(search_term))
-    result_text = 'Found: {results} available TV Shows. Showing first 10.'.format(results = len(search_results))
-    markup = generate_markup(search_results, 0)
-    bot.reply_to(message, result_text, reply_markup=markup)
+    if len(message.text) <= 8:
+        bot.reply_to(message, 'Don''t do a Pete, include something to search for: /search a tv show')
+    else:
+        search_term = message.text[8:]
+        bot.reply_to(message, "Searching for: " + search_term)
+        search_results.update(sonarr.SonarrRetriever().searchForMedia(search_term))
+        result_text = 'Found: {results} available TV Shows. Showing first 10.'.format(results = len(search_results))
+        markup = generate_markup(search_results, 0)
+        bot.reply_to(message, result_text, reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
 def  show_selection_handler(call):
