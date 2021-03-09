@@ -11,6 +11,6 @@ class result:
 
 class MediaRetriever( abc.ABC ) :
     @abc.abstractclassmethod
-    def searchForMedia(self, search_term: str ):
+    def searchForMedia(self, search_term: str ) -> list[result]:
         pass
 
