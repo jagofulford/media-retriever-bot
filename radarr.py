@@ -28,6 +28,7 @@ class RadarrRetriever(media.MediaRetriever):
             results['r'+str(result.id)] = result
         return results
     def addMedia(self, imdbid: str):
+        print("Adding movie: "+imdbid)
         media_addition_post_data = json.dumps(RadarrRetriever.buildRequest(self, imdbid))
         query_parameters = urllib.parse.urlencode({'apikey':config['radarr']['apikey'] })
         addition_request = requests.post('http://192.168.1.112:7878/api/v3/movie?{query_parameters}'.format(query_parameters=query_parameters),data=media_addition_post_data )

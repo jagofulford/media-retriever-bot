@@ -28,6 +28,7 @@ class SonarrRetriever(media.MediaRetriever):
             results['s'+str(result.id)] = result
         return results
     def addMedia(self, tvdbid: int):
+        print("Adding tv show: "+str(tvdbid))
         media_addition_post_data = json.dumps(SonarrRetriever.buildRequest(self, tvdbid))
         addition_request = requests.post('http://192.168.1.112:8989/api/series?apikey={apikey}'.format(apikey=config['sonarr']['apikey']),data=media_addition_post_data )
         if addition_request.status_code == 201:

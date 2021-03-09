@@ -14,9 +14,6 @@ config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 search_results = {}
 selected_results = {}
 
-search_movie_results = {}
-selected_movie_results = {}
-
 bot = telebot.TeleBot(config["telegram"]["token"], parse_mode=None) # You can set parse_mode by default. HTML or MARKDOWN
 
 @bot.message_handler(commands=['start', 'help'])
@@ -39,16 +36,16 @@ def search_media(message):
 
 @bot.message_handler(commands=['searchmovie'])
 def search_movie_media(message):
-    selected_movie_results.clear()
-    search_movie_results.clear()
-    if len(message.text) <= 8:
+    selected_results.clear()
+    search_results.clear()
+    if len(message.text) <= 13:
         bot.reply_to(message, 'Don''t do a Pete, include something to search for: /searchmovie movie name')
     else:
-        search_term = message.text[8:]
+        search_term = message.text[13:]
         bot.reply_to(message, "Searching for: " + search_term)
-        search_movie_results.update(radarr.RadarrRetriever().searchForMedia(search_term))
-        result_text = 'Found: {results} available Movies. Showing first 10.'.format(results = len(search_movie_results))
-        markup = generate_markup(search_movie_results, 0)
+        search_results.update(radarr.RadarrRetriever().searchForMedia(search_term))
+        result_text = 'Found: {results} available Movies. Showing first 10.'.format(results = len(search_results))
+        markup = generate_markup(search_results, 0)
         bot.reply_to(message, result_text, reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -64,7 +61,10 @@ def  show_selection_handler(call):
         added_media = search_results.get(call.data)
         response = 'Adding show: {details}'.format(details = added_media.title)
         bot.answer_callback_query(call.id, response)
-        sonarr.SonarrRetriever().addMedia(call.data[1:])
+        if (call.data[:1] == 'r'):
+            radarr.RadarrRetriever().addMedia(call.data[1:])
+        elif (call.data[:1] == 's'):
+            sonarr.SonarrRetriever().addMedia(call.data[1:])
         selected_results[call.data] = added_media
         markup = generate_markup(search_results,0, selected_results)
         bot.edit_message_reply_markup(message_id=call.message.id, chat_id=call.message.chat.id, reply_markup=markup)
