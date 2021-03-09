@@ -127,3 +127,4 @@ dmypy.json
 # config file
 config.yaml
 __pycache__/sonarr.cpython-39.pyc
+__pycache__
