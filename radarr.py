@@ -52,4 +52,4 @@ class RadarrRetriever(media.MediaRetriever):
                     request_body[key] = value
         return request_body
     def getRootFolder(self) -> str:
-        return 'D:\\TV\\'
+        return 'D:\\Movies\\'
