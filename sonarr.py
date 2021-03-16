@@ -43,7 +43,7 @@ class SonarrRetriever(media.MediaRetriever):
             "addOptions": {
                 "ignoreEpisodesWithFiles": "true",
                 "ignoreEpisodesWithoutFiles": "false",
-                "searchForMissingEpisodes": "false",
+                "searchForMissingEpisodes": "true",
             },
             "rootFolderPath": SonarrRetriever.getRootFolder(self),
             "seasonFolder": "true",

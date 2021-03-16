@@ -43,7 +43,7 @@ class RadarrRetriever(media.MediaRetriever):
         request_body = {
                 "qualityProfileId": "1",
                 "rootFolderPath": RadarrRetriever.getRootFolder(self),
-                "addOptions": {"searchForMovie": "false"},
+                "addOptions": {"searchForMovie": "true"},
             }
 
         for movie in movie_json:
